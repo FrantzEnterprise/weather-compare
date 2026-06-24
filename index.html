@@ -20,7 +20,7 @@
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1300px;
       margin: 0 auto;
     }
 
@@ -38,13 +38,20 @@
       font-size: 0.95rem;
     }
 
-    /* City Input Section */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
     .city-inputs {
       display: flex;
       gap: 1rem;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 2rem;
     }
 
     .city-input-group {
@@ -69,7 +76,7 @@
       background: rgba(255,255,255,0.08);
       color: #fff;
       font-size: 1rem;
-      width: 180px;
+      width: 155px;
       text-align: center;
       backdrop-filter: blur(4px);
       transition: border-color 0.2s;
@@ -86,17 +93,16 @@
     }
 
     .refresh-btn {
-      display: block;
-      margin: 0 auto 2rem;
-      padding: 0.75rem 2rem;
+      padding: 0.65rem 1.8rem;
       border: none;
       border-radius: 12px;
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: #fff;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
       transition: transform 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
     }
 
     .refresh-btn:hover {
@@ -106,6 +112,35 @@
 
     .refresh-btn:active {
       transform: translateY(0);
+    }
+
+    /* Toggle buttons */
+    .toggle-bar {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .toggle-btn {
+      padding: 0.4rem 1rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      color: #aaa;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .toggle-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.1);
     }
 
     /* Weather Cards */
@@ -118,15 +153,13 @@
     .weather-card {
       background: rgba(255, 255, 255, 0.06);
       border-radius: 20px;
-      padding: 1.8rem 1.5rem;
+      padding: 1.5rem 1.2rem;
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.08);
       text-align: center;
       transition: transform 0.2s, box-shadow 0.2s;
-      min-height: 320px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
     }
 
     .weather-card:hover {
@@ -135,64 +168,87 @@
     }
 
     .weather-card .city-name {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.2rem;
     }
 
     .weather-card .country {
       font-size: 0.8rem;
       color: #888;
-      margin-bottom: 1rem;
+      margin-bottom: 0.2rem;
     }
 
     .weather-card .temp {
-      font-size: 3.5rem;
+      font-size: 3.2rem;
       font-weight: 300;
-      margin: 0.5rem 0;
+      line-height: 1.1;
     }
 
     .weather-card .temp sup {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       top: -1rem;
     }
 
-    .weather-card .description {
-      font-size: 1rem;
-      color: #ccc;
-      text-transform: capitalize;
-      margin-bottom: 0.3rem;
-    }
-
-    .weather-card .feels-like {
-      font-size: 0.85rem;
-      color: #999;
-    }
-
-    .weather-card .details {
-      display: flex;
-      justify-content: center;
-      gap: 1.2rem;
-      margin-top: 1rem;
+    .weather-card .hi-low {
       font-size: 0.85rem;
       color: #aaa;
-    }
-
-    .weather-card .details span {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .weather-card .icon-wrap {
-      font-size: 3rem;
       margin-bottom: 0.5rem;
     }
 
-    .loading .weather-card {
+    .weather-card .description {
+      font-size: 0.95rem;
+      color: #ccc;
+      text-transform: capitalize;
+      margin-bottom: 0.2rem;
+    }
+
+    .weather-card .feels-like {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 0.5rem;
+    }
+
+    .weather-card .sun-times {
+      font-size: 0.8rem;
+      color: #bbb;
+      margin-bottom: 0.6rem;
       display: flex;
-      align-items: center;
       justify-content: center;
+      gap: 1.2rem;
+    }
+
+    /* Detail grid */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 0.8rem;
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      padding: 0.2rem 0.3rem;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .detail-item .label {
+      color: #888;
+    }
+
+    .detail-item .value {
+      color: #ddd;
+      font-weight: 500;
+    }
+
+    .weather-card .icon-wrap {
+      font-size: 2.5rem;
+      margin-bottom: 0.3rem;
     }
 
     .spinner {
@@ -235,6 +291,13 @@
       .city-input-group input {
         width: 100%;
       }
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .refresh-btn {
+        width: 100%;
+      }
     }
 
     @media (min-width: 801px) and (max-width: 1100px) {
@@ -248,24 +311,30 @@
 <body>
   <div class="container">
     <h1>🌤️ Weather Compare</h1>
-    <p class="subtitle">Compare weather across 3 cities side by side</p>
+    <p class="subtitle">Compare detailed weather across 3 cities side by side</p>
 
-    <div class="city-inputs">
-      <div class="city-input-group">
-        <label>City 1</label>
-        <input type="text" id="city1" value="London" placeholder="e.g. London" />
+    <div class="controls">
+      <div class="city-inputs">
+        <div class="city-input-group">
+          <label>City 1</label>
+          <input type="text" id="city1" value="London" placeholder="e.g. London" />
+        </div>
+        <div class="city-input-group">
+          <label>City 2</label>
+          <input type="text" id="city2" value="Tokyo" placeholder="e.g. Tokyo" />
+        </div>
+        <div class="city-input-group">
+          <label>City 3</label>
+          <input type="text" id="city3" value="New York" placeholder="e.g. New York" />
+        </div>
       </div>
-      <div class="city-input-group">
-        <label>City 2</label>
-        <input type="text" id="city2" value="Tokyo" placeholder="e.g. Tokyo" />
-      </div>
-      <div class="city-input-group">
-        <label>City 3</label>
-        <input type="text" id="city3" value="New York" placeholder="e.g. New York" />
-      </div>
+      <button class="refresh-btn" id="refreshBtn">🔄 Refresh</button>
     </div>
 
-    <button class="refresh-btn" id="refreshBtn">🔄 Refresh Weather</button>
+    <div class="toggle-bar">
+      <button class="toggle-btn active" id="unitF" data-unit="F">°F</button>
+      <button class="toggle-btn" id="unitC" data-unit="C">°C</button>
+    </div>
 
     <div class="weather-grid" id="weatherGrid">
       <!-- Cards rendered by JS -->
@@ -278,12 +347,40 @@
     const API_KEY = '3568cb531e6528ea194ba116817e4b54';
     const DEFAULT_CITIES = ['London', 'Tokyo', 'New York'];
     const CARD_COLORS = [
-      'rgba(102, 126, 234, 0.15)',
-      'rgba(118, 75, 162, 0.15)',
-      'rgba(237, 100, 166, 0.15)'
+      'rgba(102, 126, 234, 0.12)',
+      'rgba(118, 75, 162, 0.12)',
+      'rgba(237, 100, 166, 0.12)'
     ];
 
-    let lastData = null;
+    let currentUnit = 'F';
+
+    // ─── helpers ────────────────────────────────────────
+
+    function degToCompass(deg) {
+      const dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+      return dirs[Math.round(deg / 22.5) % 16];
+    }
+
+    function formatTime(ts, tzOffset) {
+      const d = new Date((ts + tzOffset) * 1000);
+      return d.toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function convertTemp(tempF) {
+      if (currentUnit === 'C') return Math.round((tempF - 32) * 5 / 9);
+      return Math.round(tempF);
+    }
+
+    function tempUnit() {
+      return currentUnit === 'C' ? '°C' : '°F';
+    }
+
+    function visibilityStr(meters) {
+      if (meters >= 1000) return (meters / 1000).toFixed(1) + ' km';
+      return meters + ' m';
+    }
+
+    // ─── API ────────────────────────────────────────────
 
     async function fetchWeather(city) {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=imperial&appid=${API_KEY}`;
@@ -296,10 +393,22 @@
       return res.json();
     }
 
-    function buildCardHTML(data, index) {
-      const icon = data.weather && data.weather[0];
-      const iconUrl = icon ? `https://openweathermap.org/img/wn/${icon.icon}@2x.png` : '';
-      const emojiMap = {
+    async function fetchUVI(lat, lon) {
+      try {
+        const url = `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.value;
+      } catch {
+        return null;
+      }
+    }
+
+    // ─── emoji ──────────────────────────────────────────
+
+    function weatherEmoji(iconCode) {
+      const map = {
         '01d': '☀️', '01n': '🌙',
         '02d': '⛅', '02n': '☁️',
         '03d': '☁️', '03n': '☁️',
@@ -310,21 +419,67 @@
         '13d': '❄️', '13n': '❄️',
         '50d': '🌫️', '50n': '🌫️'
       };
-      const emoji = (icon && emojiMap[icon.icon]) || '🌡️';
+      return map[iconCode] || '🌡️';
+    }
+
+    function uviLevel(val) {
+      if (val === null || val === undefined) return '—';
+      if (val <= 2) return `${val} (Low)`;
+      if (val <= 5) return `${val} (Moderate)`;
+      if (val <= 7) return `${val} (High)`;
+      if (val <= 10) return `${val} (Very High)`;
+      return `${val} (Extreme)`;
+    }
+
+    // ─── card builders ──────────────────────────────────
+
+    function buildCardHTML(data, index) {
+      const icon = data.weather && data.weather[0];
+      const emoji = icon ? weatherEmoji(icon.icon) : '🌡️';
       const bgColor = CARD_COLORS[index % CARD_COLORS.length];
+      const tz = data.timezone || 0;
+
+      const temp = convertTemp(data.main.temp);
+      const feelsLike = convertTemp(data.main.feels_like);
+      const tempMin = convertTemp(data.main.temp_min);
+      const tempMax = convertTemp(data.main.temp_max);
+      const unit = tempUnit();
+
+      const windDeg = data.wind.deg;
+      const windDir = windDeg !== undefined ? degToCompass(windDeg) : '—';
+
+      const sunrise = data.sys && data.sys.sunrise ? formatTime(data.sys.sunrise, tz) : '—';
+      const sunset  = data.sys && data.sys.sunset  ? formatTime(data.sys.sunset, tz) : '—';
+
+      let uvi = '...';
+      // Fetch UV async in background and update card later
+      if (data.coord) {
+        fetchUVI(data.coord.lat, data.coord.lon).then(val => {
+          const el = document.getElementById(`uvi-${index}`);
+          if (el) el.textContent = uviLevel(val);
+        });
+      }
 
       return `
         <div class="weather-card" style="background: ${bgColor};">
           <div class="icon-wrap">${emoji}</div>
           <div class="city-name">${data.name}</div>
           <div class="country">${data.sys ? data.sys.country : ''}</div>
-          <div class="temp">${Math.round(data.main.temp)}<sup>°F</sup></div>
+          <div class="temp">${temp}<sup>${unit}</sup></div>
+          <div class="hi-low">H: ${tempMax}${unit} &nbsp; L: ${tempMin}${unit}</div>
           <div class="description">${icon ? icon.description : ''}</div>
-          <div class="feels-like">Feels like ${Math.round(data.main.feels_like)}°F</div>
-          <div class="details">
-            <span>💧 ${data.main.humidity}%</span>
-            <span>💨 ${Math.round(data.wind.speed)} m/s</span>
-            <span>📊 ${Math.round(data.main.pressure)} hPa</span>
+          <div class="feels-like">Feels like ${feelsLike}${unit}</div>
+          <div class="sun-times">
+            <span>🌅 ${sunrise}</span>
+            <span>🌇 ${sunset}</span>
+          </div>
+          <div class="detail-grid">
+            <div class="detail-item"><span class="label">💧 Humidity</span><span class="value">${data.main.humidity}%</span></div>
+            <div class="detail-item"><span class="label">💨 Wind</span><span class="value">${Math.round(data.wind.speed)} mph ${windDir}</span></div>
+            <div class="detail-item"><span class="label">📊 Pressure</span><span class="value">${Math.round(data.main.pressure)} hPa</span></div>
+            <div class="detail-item"><span class="label">☁️ Clouds</span><span class="value">${data.clouds ? data.clouds.all : '—'}%</span></div>
+            <div class="detail-item"><span class="label">👁️ Visibility</span><span class="value">${data.visibility !== undefined ? visibilityStr(data.visibility) : '—'}</span></div>
+            <div class="detail-item"><span class="label">🌞 UV Index</span><span class="value" id="uvi-${index}">...</span></div>
           </div>
         </div>
       `;
@@ -342,12 +497,14 @@
 
     function buildLoadingCard() {
       return `
-        <div class="weather-card">
+        <div class="weather-card" style="min-height: 350px; justify-content: center; align-items: center;">
           <div class="spinner"></div>
           <div style="color: #888; margin-top: 1rem;">Loading...</div>
         </div>
       `;
     }
+
+    // ─── main update ────────────────────────────────────
 
     async function updateWeather() {
       const grid = document.getElementById('weatherGrid');
@@ -356,7 +513,6 @@
       const city3 = document.getElementById('city3').value.trim() || DEFAULT_CITIES[2];
       const cities = [city1, city2, city3];
 
-      // Show loading
       grid.innerHTML = cities.map(() => buildLoadingCard()).join('');
 
       try {
@@ -384,13 +540,27 @@
       }
     }
 
-    // Load on page load
+    // ─── unit toggle ────────────────────────────────────
+
+    function setUnit(unit) {
+      currentUnit = unit;
+      document.getElementById('unitF').classList.toggle('active', unit === 'F');
+      document.getElementById('unitC').classList.toggle('active', unit === 'C');
+      // Re-render with same data if any cards exist
+      const grid = document.getElementById('weatherGrid');
+      const firstCard = grid.querySelector('.weather-card');
+      if (firstCard && !firstCard.querySelector('.spinner')) {
+        updateWeather();
+      }
+    }
+
+    document.getElementById('unitF').addEventListener('click', () => setUnit('F'));
+    document.getElementById('unitC').addEventListener('click', () => setUnit('C'));
+
+    // ─── init ───────────────────────────────────────────
+
     document.addEventListener('DOMContentLoaded', updateWeather);
-
-    // Refresh button
     document.getElementById('refreshBtn').addEventListener('click', updateWeather);
-
-    // Allow Enter key to trigger refresh
     document.querySelectorAll('.city-inputs input').forEach(input => {
       input.addEventListener('keydown', e => {
         if (e.key === 'Enter') updateWeather();
