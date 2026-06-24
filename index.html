@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌤️ 3-City Weather Compare</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      min-height: 100vh;
+      color: #fff;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    /* City Input Section */
+    .city-inputs {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .city-input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .city-input-group label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #9b8ecb;
+      font-weight: 600;
+    }
+
+    .city-input-group input {
+      padding: 0.6rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 1rem;
+      width: 180px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      transition: border-color 0.2s;
+    }
+
+    .city-input-group input:focus {
+      outline: none;
+      border-color: #7c6bdb;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .city-input-group input::placeholder {
+      color: #666;
+    }
+
+    .refresh-btn {
+      display: block;
+      margin: 0 auto 2rem;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .refresh-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .refresh-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Weather Cards */
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .weather-card {
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 1.8rem 1.5rem;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .weather-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .weather-card .city-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .weather-card .country {
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 1rem;
+    }
+
+    .weather-card .temp {
+      font-size: 3.5rem;
+      font-weight: 300;
+      margin: 0.5rem 0;
+    }
+
+    .weather-card .temp sup {
+      font-size: 1.5rem;
+      top: -1rem;
+    }
+
+    .weather-card .description {
+      font-size: 1rem;
+      color: #ccc;
+      text-transform: capitalize;
+      margin-bottom: 0.3rem;
+    }
+
+    .weather-card .feels-like {
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    .weather-card .details {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+    .weather-card .details span {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .weather-card .icon-wrap {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .loading .weather-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-msg {
+      color: #ff6b6b;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .last-updated {
+      text-align: center;
+      color: #666;
+      font-size: 0.8rem;
+      margin-top: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+      .weather-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .city-inputs {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .city-input-group input {
+        width: 100%;
+      }
+    }
+
+    @media (min-width: 801px) and (max-width: 1100px) {
+      .weather-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌤️ Weather Compare</h1>
+    <p class="subtitle">Compare weather across 3 cities side by side</p>
+
+    <div class="city-inputs">
+      <div class="city-input-group">
+        <label>City 1</label>
+        <input type="text" id="city1" value="London" placeholder="e.g. London" />
+      </div>
+      <div class="city-input-group">
+        <label>City 2</label>
+        <input type="text" id="city2" value="Tokyo" placeholder="e.g. Tokyo" />
+      </div>
+      <div class="city-input-group">
+        <label>City 3</label>
+        <input type="text" id="city3" value="New York" placeholder="e.g. New York" />
+      </div>
+    </div>
+
+    <button class="refresh-btn" id="refreshBtn">🔄 Refresh Weather</button>
+
+    <div class="weather-grid" id="weatherGrid">
+      <!-- Cards rendered by JS -->
+    </div>
+
+    <p class="last-updated" id="lastUpdated"></p>
+  </div>
+
+  <script>
+    const API_KEY = '076e54e4b4d69d819512f09c7f952bc1'; // OpenWeatherMap free tier key
+    const DEFAULT_CITIES = ['London', 'Tokyo', 'New York'];
+    const CARD_COLORS = [
+      'rgba(102, 126, 234, 0.15)',
+      'rgba(118, 75, 162, 0.15)',
+      'rgba(237, 100, 166, 0.15)'
+    ];
+
+    let lastData = null;
+
+    async function fetchWeather(city) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${API_KEY}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        if (res.status === 404) throw new Error(`City not found: "${city}"`);
+        if (res.status === 401) throw new Error('Invalid API key');
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+      return res.json();
+    }
+
+    function buildCardHTML(data, index) {
+      const icon = data.weather && data.weather[0];
+      const iconUrl = icon ? `https://openweathermap.org/img/wn/${icon.icon}@2x.png` : '';
+      const emojiMap = {
+        '01d': '☀️', '01n': '🌙',
+        '02d': '⛅', '02n': '☁️',
+        '03d': '☁️', '03n': '☁️',
+        '04d': '☁️', '04n': '☁️',
+        '09d': '🌧️', '09n': '🌧️',
+        '10d': '🌦️', '10n': '🌧️',
+        '11d': '⛈️', '11n': '⛈️',
+        '13d': '❄️', '13n': '❄️',
+        '50d': '🌫️', '50n': '🌫️'
+      };
+      const emoji = (icon && emojiMap[icon.icon]) || '🌡️';
+      const bgColor = CARD_COLORS[index % CARD_COLORS.length];
+
+      return `
+        <div class="weather-card" style="background: ${bgColor};">
+          <div class="icon-wrap">${emoji}</div>
+          <div class="city-name">${data.name}</div>
+          <div class="country">${data.sys ? data.sys.country : ''}</div>
+          <div class="temp">${Math.round(data.main.temp)}<sup>°C</sup></div>
+          <div class="description">${icon ? icon.description : ''}</div>
+          <div class="feels-like">Feels like ${Math.round(data.main.feels_like)}°C</div>
+          <div class="details">
+            <span>💧 ${data.main.humidity}%</span>
+            <span>💨 ${Math.round(data.wind.speed)} m/s</span>
+            <span>📊 ${Math.round(data.main.pressure)} hPa</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildErrorCard(city, errorMsg) {
+      return `
+        <div class="weather-card" style="background: rgba(255, 107, 107, 0.1);">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;">⚠️</div>
+          <div class="city-name">${city}</div>
+          <div class="error-msg">${errorMsg}</div>
+        </div>
+      `;
+    }
+
+    function buildLoadingCard() {
+      return `
+        <div class="weather-card">
+          <div class="spinner"></div>
+          <div style="color: #888; margin-top: 1rem;">Loading...</div>
+        </div>
+      `;
+    }
+
+    async function updateWeather() {
+      const grid = document.getElementById('weatherGrid');
+      const city1 = document.getElementById('city1').value.trim() || DEFAULT_CITIES[0];
+      const city2 = document.getElementById('city2').value.trim() || DEFAULT_CITIES[1];
+      const city3 = document.getElementById('city3').value.trim() || DEFAULT_CITIES[2];
+      const cities = [city1, city2, city3];
+
+      // Show loading
+      grid.innerHTML = cities.map(() => buildLoadingCard()).join('');
+
+      try {
+        const results = await Promise.allSettled(
+          cities.map(city => fetchWeather(city))
+        );
+
+        const html = results.map((result, idx) => {
+          if (result.status === 'fulfilled') {
+            return buildCardHTML(result.value, idx);
+          } else {
+            return buildErrorCard(cities[idx], result.reason.message);
+          }
+        }).join('');
+
+        grid.innerHTML = html;
+
+        const now = new Date();
+        document.getElementById('lastUpdated').textContent =
+          `Last updated: ${now.toLocaleTimeString()} on ${now.toLocaleDateString()}`;
+      } catch (err) {
+        grid.innerHTML = cities.map(() =>
+          buildErrorCard('Error', err.message)
+        ).join('');
+      }
+    }
+
+    // Load on page load
+    document.addEventListener('DOMContentLoaded', updateWeather);
+
+    // Refresh button
+    document.getElementById('refreshBtn').addEventListener('click', updateWeather);
+
+    // Allow Enter key to trigger refresh
+    document.querySelectorAll('.city-inputs input').forEach(input => {
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') updateWeather();
+      });
+    });
+  </script>
+</body>
+</html>
